@@ -1,0 +1,41 @@
+{
+  "name": "engineering-standards-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for managing engineering standards, practices, and processes",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "echo 'Build skipped - using tsx directly. For production, use: tsc --build' && exit 0",
+    "start": "tsx src/index.ts",
+    "dev": "tsx src/index.ts",
+    "clean": "rm -rf dist",
+    "migrate": "tsx scripts/migrate-standards.ts",
+    "migrate:apply": "tsx scripts/migrate-standards.ts --apply"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "engineering-standards",
+    "documentation"
+  ],
+  "author": "New York Life - Technology Division",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.24.3",
+    "express": "^4.18.2",
+    "zod": "^3.23.8",
+    "gray-matter": "^4.0.3",
+    "glob": "^10.3.10",
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/express": "^4.17.21",
+    "@types/js-yaml": "^4.0.9",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
