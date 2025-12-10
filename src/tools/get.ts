@@ -13,7 +13,7 @@ import { formatStandard, formatStandards } from '../services/parser.js';
  */
 export async function getStandard(params: GetStandardInput): Promise<ToolResponse> {
   try {
-    const { path, type, tier, process, tags, response_format } = params;
+    const { path, type, tier, process, tags, responseFormat } = params;
 
     // Find by exact path if provided
     if (path) {
@@ -31,7 +31,7 @@ export async function getStandard(params: GetStandardInput): Promise<ToolRespons
         };
       }
 
-      const outputText = formatStandard(standard, response_format);
+      const outputText = formatStandard(standard, responseFormat);
 
       return {
         content: [
@@ -65,7 +65,7 @@ export async function getStandard(params: GetStandardInput): Promise<ToolRespons
     }
 
     // If multiple standards found, return all of them
-    const outputText = formatStandards(standards, response_format);
+    const outputText = formatStandards(standards, responseFormat);
     const structuredOutput = {
       count: standards.length,
       standards,

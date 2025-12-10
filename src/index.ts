@@ -39,44 +39,26 @@ function createMcpServer(): McpServer {
     version: SERVER_VERSION,
   });
 
-  // Tool 1: standards_list_index (READ-ONLY)
+  // Tool 1: list_standards (READ-ONLY)
   server.registerTool(
-    TOOL_NAMES.LIST_INDEX,
+    TOOL_NAMES.LIST_STANDARDS,
     {
-      title: 'List Standards Index',
-      description: `Returns a hierarchical index of all engineering standards, organized by type, tier, and process.
+      title: 'List Standards',
+      description: `Browse all engineering standards organized by type, tier, and process.
 
-This tool provides an overview of all available standards in the knowledge base, making it easy to browse and discover standards by category.
+Use this tool to discover what standards are available and explore them by category. Returns a hierarchical index of all standards in the knowledge base.
 
-Args:
-  - filter_type (optional): Filter by standard type ('principle' | 'standard' | 'practice' | 'tech-stack' | 'process')
-  - filter_tier (optional): Filter by tier ('frontend' | 'backend' | 'database' | 'infrastructure' | 'security')
-  - filter_process (optional): Filter by process ('development' | 'testing' | 'delivery' | 'operations')
-  - filter_status (optional): Filter by status ('active' | 'draft' | 'deprecated')
-  - response_format (optional): Output format ('json' | 'markdown'), default 'markdown'
-
-Returns:
-  For JSON format: Structured data with hierarchical index
-  {
-    "totalCount": number,
-    "index": {
-      "[type]": {
-        "[tier]": {
-          "[process]": [
-            {
-              "path": "string",
-              "metadata": { ... }
-            }
-          ]
-        }
-      }
-    }
-  }
+Parameters:
+  - filterType (optional): Filter by standard type ('principle' | 'standard' | 'practice' | 'tech-stack' | 'process')
+  - filterTier (optional): Filter by tier ('frontend' | 'backend' | 'database' | 'infrastructure' | 'security')
+  - filterProcess (optional): Filter by process ('development' | 'testing' | 'delivery' | 'operations')
+  - filterStatus (optional): Filter by status ('active' | 'draft' | 'deprecated')
+  - responseFormat (optional): Output format ('json' | 'markdown'), default 'markdown'
 
 Examples:
-  - List all standards: No filters
-  - List backend standards: filter_tier="backend"
-  - List active principles: filter_type="principles", filter_status="active"`,
+  - List all standards: {}
+  - List backend standards: { filterTier: "backend" }
+  - List active principles: { filterType: "principle", filterStatus: "active" }`,
       inputSchema: ListIndexInputSchema,
       annotations: {
         readOnlyHint: true,
@@ -88,32 +70,28 @@ Examples:
     listIndex
   );
 
-  // Tool 2: standards_get (READ-ONLY)
+  // Tool 2: get_standard (READ-ONLY)
   server.registerTool(
-    TOOL_NAMES.GET,
+    TOOL_NAMES.GET_STANDARD,
     {
       title: 'Get Standard',
-      description: `Retrieves a specific standard by exact path or by metadata combination.
+      description: `Retrieve a specific standard by path or metadata.
 
-Use this tool to read the complete content and metadata of one or more standards. You can retrieve by exact file path or by specifying type, tier, and process.
+Use this tool to read the complete content and metadata of one or more standards. Retrieve by exact file path or by specifying type, tier, and process.
 
-Args:
-  - path (optional): Exact file path relative to the standards directory (e.g., 'standard-backend-development-spring-boot-security-active.md'). For backward compatibility, 'standards/spring-boot-security.md' and 'spring-boot-security.md' will also be accepted.
+Parameters:
+  - path (optional): Exact file path relative to the data directory (e.g., 'standard-backend-development-spring-boot-security-active.md')
   - type (optional): Standard type to search for
   - tier (optional): Tier to search for
   - process (optional): Process to search for
   - tags (optional): Array of tags to filter by (must match all)
-  - response_format (optional): Output format ('json' | 'markdown'), default 'markdown'
+  - responseFormat (optional): Output format ('json' | 'markdown'), default 'markdown'
 
 Note: Must provide either 'path' OR combination of 'type', 'tier', and 'process'.
 
-Returns:
-  Complete standard with metadata and content. If multiple standards match metadata criteria, returns all matches.
-
 Examples:
-  - Get by path: path="standard-backend-development-spring-boot-security-active.md"
-  - Get by metadata: type="standards", tier="backend", process="development"
-  - Get with tags: type="practices", tier="frontend", process="testing", tags=["unit-testing"]`,
+  - Get by path: { path: "standard-backend-development-spring-boot-security-active.md" }
+  - Get by metadata: { type: "standard", tier: "backend", process: "development" }`,
       inputSchema: GetStandardInputSchema,
       annotations: {
         readOnlyHint: true,
@@ -125,35 +103,28 @@ Examples:
     getStandard
   );
 
-  // Tool 3: standards_search (READ-ONLY)
+  // Tool 3: search_standards (READ-ONLY)
   server.registerTool(
-    TOOL_NAMES.SEARCH,
+    TOOL_NAMES.SEARCH_STANDARDS,
     {
       title: 'Search Standards',
-      description: `Full-text search across all standards with optional filtering by metadata.
+      description: `Search standards by keyword with optional filters.
 
-Searches through both content and metadata of standards, returning results ranked by relevance score. Provides context snippets around matches.
+Performs full-text search across both content and metadata of all standards. Returns results ranked by relevance with context snippets showing where matches were found.
 
-Args:
-  - query (string, required): Search query (minimum 2 characters)
-  - filter_type (optional): Filter results by type
-  - filter_tier (optional): Filter results by tier
-  - filter_process (optional): Filter results by process
-  - filter_tags (optional): Filter results by tags
+Parameters:
+  - query (required): Search query string (minimum 2 characters)
+  - filterType (optional): Filter results by type
+  - filterTier (optional): Filter results by tier
+  - filterProcess (optional): Filter results by process
+  - filterTags (optional): Filter results by tags
   - limit (optional): Max results to return (1-${MAX_SEARCH_LIMIT}), default 10
-  - response_format (optional): Output format ('json' | 'markdown'), default 'markdown'
-
-Returns:
-  Array of matching standards with:
-  - Relevance score
-  - Match count
-  - Context snippets showing where matches were found
-  - Complete metadata
+  - responseFormat (optional): Output format ('json' | 'markdown'), default 'markdown'
 
 Examples:
-  - Search all: query="authentication"
-  - Search backend only: query="security", filter_tier="backend"
-  - Search with limit: query="testing", limit=5`,
+  - Search all: { query: "authentication" }
+  - Search backend: { query: "security", filterTier: "backend" }
+  - Limited results: { query: "testing", limit: 5 }`,
       inputSchema: SearchStandardsInputSchema,
       annotations: {
         readOnlyHint: true,
@@ -165,30 +136,27 @@ Examples:
     searchStandardsTool
   );
 
-  // Tool 4: standards_get_metadata (READ-ONLY)
+  // Tool 4: get_standards_metadata (READ-ONLY)
   server.registerTool(
-    TOOL_NAMES.GET_METADATA,
+    TOOL_NAMES.GET_STANDARDS_METADATA,
     {
       title: 'Get Standards Metadata',
-      description: `Retrieves metadata for standards without loading full content. Useful for browsing and discovery.
+      description: `Retrieve metadata for standards without loading content.
 
-This tool is more efficient than standards_get when you only need to see what standards exist and their metadata, without loading the full content.
+Use this tool for efficient browsing and discovery when you only need to see what standards exist and their metadata. More efficient than get_standard when full content is not needed.
 
-Args:
-  - filter_type (optional): Filter by type
-  - filter_tier (optional): Filter by tier
-  - filter_process (optional): Filter by process
-  - filter_tags (optional): Filter by tags array
-  - filter_status (optional): Filter by status
-  - response_format (optional): Output format ('json' | 'markdown'), default 'markdown'
-
-Returns:
-  Array of metadata entries with path information (no content).
+Parameters:
+  - filterType (optional): Filter by type
+  - filterTier (optional): Filter by tier
+  - filterProcess (optional): Filter by process
+  - filterTags (optional): Filter by tags array
+  - filterStatus (optional): Filter by status
+  - responseFormat (optional): Output format ('json' | 'markdown'), default 'markdown'
 
 Examples:
-  - Get all metadata: No filters
-  - Get backend metadata: filter_tier="backend"
-  - Get active frontend practices: filter_type="practices", filter_tier="frontend", filter_status="active"`,
+  - Get all metadata: {}
+  - Get backend metadata: { filterTier: "backend" }
+  - Get active frontend practices: { filterType: "practice", filterTier: "frontend", filterStatus: "active" }`,
       inputSchema: GetMetadataInputSchema,
       annotations: {
         readOnlyHint: true,
@@ -200,20 +168,16 @@ Examples:
     getMetadata
   );
 
-  // Tool 5: standards_create (DESTRUCTIVE)
+  // Tool 5: create_standard (DESTRUCTIVE)
   server.registerTool(
-    TOOL_NAMES.CREATE,
+    TOOL_NAMES.CREATE_STANDARD,
     {
       title: 'Create Standard',
-      description: `Creates a new standard with metadata and content.
+      description: `Create a new standard with metadata and content.
 
-Use this tool to add new standards to the knowledge base. The system will automatically:
-- Generate version 1.0.0
-- Set created and updated dates
-- Generate file path from metadata
-- Create directory structure as needed
+Adds a new standard to the knowledge base. The system automatically generates version 1.0.0, sets timestamps, and creates the file path from metadata.
 
-Args:
+Parameters:
   - metadata (required): Object with required fields:
     - type: 'principle' | 'standard' | 'practice' | 'tech-stack' | 'process'
     - tier: 'frontend' | 'backend' | 'database' | 'infrastructure' | 'security'
@@ -224,13 +188,8 @@ Args:
   - content (required): Markdown content of the standard
   - filename (optional): Custom filename (auto-generated if not provided)
 
-Returns:
-  Created standard with generated path and complete metadata.
-
-Examples:
-  - Create backend standard:
-    metadata: { type: "standards", tier: "backend", process: "development", tags: ["api", "rest"], author: "Tech Team", status: "active" }
-    content: "# API Standards\\n\\n..."`,
+Example:
+  { metadata: { type: "standard", tier: "backend", process: "development", tags: ["api"], author: "Tech Team", status: "active" }, content: "# API Standards\\n..." }`,
       inputSchema: CreateStandardInputSchema,
       annotations: {
         readOnlyHint: false,
@@ -242,35 +201,27 @@ Examples:
     createStandardTool
   );
 
-  // Tool 6: standards_update (DESTRUCTIVE)
+  // Tool 6: update_standard (DESTRUCTIVE)
   server.registerTool(
-    TOOL_NAMES.UPDATE,
+    TOOL_NAMES.UPDATE_STANDARD,
     {
       title: 'Update Standard',
-      description: `Updates an existing standard's content and/or metadata.
+      description: `Update an existing standard's content or metadata.
 
-Use this tool to modify existing standards. The system will automatically:
-- Bump the version number (major/minor/patch)
-- Update the 'updated' timestamp
-- Refresh the index
+Modify an existing standard. The system automatically bumps the version number and updates timestamps. If metadata fields affecting the filename are changed, the file will be renamed.
 
-Args:
+Parameters:
   - path (required): Path to the standard to update
   - content (optional): New markdown content
   - metadata (optional): Partial metadata object with fields to update
-  - version_bump (optional): Version increment type ('major' | 'minor' | 'patch'), default 'patch'
+  - versionBump (optional): Version increment type ('major' | 'minor' | 'patch'), default 'patch'
 
 Note: Must provide either 'content' or 'metadata' (or both).
-Note: Cannot modify the 'created' date.
-
-Returns:
-  Updated standard with new version and metadata.
 
 Examples:
-  - Update content only: path="standard-backend-development-api-active.md", content="# Updated API Standards\\n..."
-  - Update metadata: path="...", metadata={ status: "deprecated" }
-  - Major update: path="...", content="...", version_bump="major"
-  - Note: If metadata fields that affect the filename (type, tier, process, status) are updated, the server will rename the file on disk to reflect the new metadata.`,
+  - Update content: { path: "standard-backend-development-api-active.md", content: "# Updated API Standards\\n..." }
+  - Update metadata: { path: "...", metadata: { status: "deprecated" } }
+  - Major update: { path: "...", content: "...", versionBump: "major" }`,
       inputSchema: UpdateStandardInputSchema,
       annotations: {
         readOnlyHint: false,

@@ -14,7 +14,7 @@ export const DEFAULT_PORT = 3000;
 /**
  * Storage configuration
  */
-export const STANDARDS_DIR = process.env.STANDARDS_DIR || path.join(process.cwd(), 'standards');
+export const STANDARDS_DIR = process.env.STANDARDS_DIR || path.join(process.cwd(), 'data');
 
 /**
  * Valid metadata values
@@ -53,14 +53,15 @@ export const ISO_DATE_FORMAT = 'YYYY-MM-DD';
 
 /**
  * Tool names (with service prefix for MCP)
+ * Following VS Code best practices: {verb}_{noun} format in snake_case
  */
 export const TOOL_NAMES = {
-  LIST_INDEX: 'standards_list_index',
-  GET: 'standards_get',
-  SEARCH: 'standards_search',
-  CREATE: 'standards_create',
-  UPDATE: 'standards_update',
-  GET_METADATA: 'standards_get_metadata',
+  LIST_STANDARDS: 'list_standards',
+  GET_STANDARD: 'get_standard',
+  SEARCH_STANDARDS: 'search_standards',
+  CREATE_STANDARD: 'create_standard',
+  UPDATE_STANDARD: 'update_standard',
+  GET_STANDARDS_METADATA: 'get_standards_metadata',
 } as const;
 
 /**

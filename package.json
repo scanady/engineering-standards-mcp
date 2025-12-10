@@ -5,12 +5,17 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "build": "echo 'Build skipped - using tsx directly. For production, use: tsc --build' && exit 0",
-    "start": "tsx src/index.ts",
+    "build": "tsc --build",
+    "start": "node dist/index.js",
     "dev": "tsx src/index.ts",
     "clean": "rm -rf dist",
     "migrate": "tsx scripts/migrate-standards.ts",
-    "migrate:apply": "tsx scripts/migrate-standards.ts --apply"
+    "migrate:apply": "tsx scripts/migrate-standards.ts --apply",
+    "docker:build": "docker build -t engineering-standards-mcp-server .",
+    "docker:run": "docker run -p 3000:3000 engineering-standards-mcp-server",
+    "docker:compose:up": "docker-compose up -d",
+    "docker:compose:down": "docker-compose down",
+    "docker:compose:logs": "docker-compose logs -f"
   },
   "keywords": [
     "mcp",

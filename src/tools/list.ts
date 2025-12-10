@@ -12,14 +12,14 @@ import { buildHierarchicalIndex, formatHierarchicalIndexAsMarkdown } from '../se
  */
 export async function listIndex(params: ListIndexInput): Promise<ToolResponse> {
   try {
-    const { filter_type, filter_tier, filter_process, filter_status, response_format } = params;
+    const { filterType, filterTier, filterProcess, filterStatus, responseFormat } = params;
 
     // Build filtered hierarchical index
     const hierarchicalIndex = buildHierarchicalIndex({
-      type: filter_type,
-      tier: filter_tier,
-      process: filter_process,
-      status: filter_status,
+      type: filterType,
+      tier: filterTier,
+      process: filterProcess,
+      status: filterStatus,
     });
 
     // Count total standards
@@ -36,7 +36,7 @@ export async function listIndex(params: ListIndexInput): Promise<ToolResponse> {
     let outputText: string;
     let structuredOutput: unknown;
 
-    if (response_format === 'json') {
+    if (responseFormat === 'json') {
       structuredOutput = {
         totalCount,
         index: hierarchicalIndex,

@@ -13,17 +13,17 @@ import { formatSearchResults } from '../services/parser.js';
  */
 export async function searchStandardsTool(params: SearchStandardsInput): Promise<ToolResponse> {
   try {
-    const { query, filter_type, filter_tier, filter_process, filter_tags, limit, response_format } =
+    const { query, filterType, filterTier, filterProcess, filterTags, limit, responseFormat } =
       params;
 
     // Perform search
     const results = searchStandards(
       query,
       {
-        type: filter_type,
-        tier: filter_tier,
-        process: filter_process,
-        tags: filter_tags,
+        type: filterType,
+        tier: filterTier,
+        process: filterProcess,
+        tags: filterTags,
       },
       limit
     );
@@ -45,7 +45,7 @@ export async function searchStandardsTool(params: SearchStandardsInput): Promise
     }
 
     // Format results
-    const outputText = formatSearchResults(results, response_format);
+    const outputText = formatSearchResults(results, responseFormat);
     const structuredOutput = {
       query,
       count: results.length,

@@ -55,40 +55,40 @@ export const VersionBumpSchema = z
  * Tool input schemas
  */
 
-// standards_list_index
+// list_standards
 export const ListIndexInputSchema = z
   .object({
-    filter_type: z.enum(VALID_TYPES).optional().describe('Filter by standard type'),
-    filter_tier: z.enum(VALID_TIERS).optional().describe('Filter by tier'),
-    filter_process: z.enum(VALID_PROCESSES).optional().describe('Filter by process'),
-    filter_status: z.enum(VALID_STATUSES).optional().describe('Filter by status'),
-    response_format: ResponseFormatSchema,
+    filterType: z.enum(VALID_TYPES).optional().describe('Filter by standard type'),
+    filterTier: z.enum(VALID_TIERS).optional().describe('Filter by tier'),
+    filterProcess: z.enum(VALID_PROCESSES).optional().describe('Filter by process'),
+    filterStatus: z.enum(VALID_STATUSES).optional().describe('Filter by status'),
+    responseFormat: ResponseFormatSchema,
   })
   .strict();
 
-// standards_get
+// get_standard
 export const GetStandardInputSchema = z
   .object({
-    path: z.string().optional().describe('Exact file path to the standard relative to the standards directory (e.g., standard-backend-development-spring-boot-security-active.md). For backward compatibility the server accepts shorter names (e.g. spring-boot-security.md or standards/spring-boot-security.md)'),
+    path: z.string().optional().describe('Exact file path to the standard relative to the data directory (e.g., standard-backend-development-spring-boot-security-active.md). For backward compatibility the server accepts shorter names (e.g. spring-boot-security.md or data/spring-boot-security.md)'),
     type: z.enum(VALID_TYPES).optional().describe('Standard type to search for'),
     tier: z.enum(VALID_TIERS).optional().describe('Tier to search for'),
     process: z.enum(VALID_PROCESSES).optional().describe('Process to search for'),
     tags: z.array(z.string()).optional().describe('Tags to filter by (must match all)'),
-    response_format: ResponseFormatSchema,
+    responseFormat: ResponseFormatSchema,
   })
   .strict()
   .refine((data) => data.path || (data.type && data.tier && data.process), {
     message: 'Must provide either path or combination of type, tier, and process',
   });
 
-// standards_search
+// search_standards
 export const SearchStandardsInputSchema = z
   .object({
     query: z.string().min(2).describe('Search query string (minimum 2 characters)'),
-    filter_type: z.enum(VALID_TYPES).optional().describe('Filter results by type'),
-    filter_tier: z.enum(VALID_TIERS).optional().describe('Filter results by tier'),
-    filter_process: z.enum(VALID_PROCESSES).optional().describe('Filter results by process'),
-    filter_tags: z.array(z.string()).optional().describe('Filter results by tags'),
+    filterType: z.enum(VALID_TYPES).optional().describe('Filter results by type'),
+    filterTier: z.enum(VALID_TIERS).optional().describe('Filter results by tier'),
+    filterProcess: z.enum(VALID_PROCESSES).optional().describe('Filter results by process'),
+    filterTags: z.array(z.string()).optional().describe('Filter results by tags'),
     limit: z
       .number()
       .int()
@@ -96,11 +96,11 @@ export const SearchStandardsInputSchema = z
       .max(MAX_SEARCH_LIMIT)
       .default(10)
       .describe(`Maximum number of results to return (1-${MAX_SEARCH_LIMIT})`),
-    response_format: ResponseFormatSchema,
+    responseFormat: ResponseFormatSchema,
   })
   .strict();
 
-// standards_create
+// create_standard
 export const CreateStandardInputSchema = z
   .object({
     metadata: z
@@ -118,28 +118,28 @@ export const CreateStandardInputSchema = z
   })
   .strict();
 
-// standards_update
+// update_standard
 export const UpdateStandardInputSchema = z
   .object({
     path: z.string().describe('Path to the standard to update'),
     content: z.string().optional().describe('New content for the standard'),
     metadata: PartialStandardMetadataSchema.optional().describe('Metadata fields to update'),
-    version_bump: VersionBumpSchema,
+    versionBump: VersionBumpSchema,
   })
   .strict()
   .refine((data) => data.content || data.metadata, {
     message: 'Must provide either content or metadata to update',
   });
 
-// standards_get_metadata
+// get_standards_metadata
 export const GetMetadataInputSchema = z
   .object({
-    filter_type: z.enum(VALID_TYPES).optional().describe('Filter by type'),
-    filter_tier: z.enum(VALID_TIERS).optional().describe('Filter by tier'),
-    filter_process: z.enum(VALID_PROCESSES).optional().describe('Filter by process'),
-    filter_tags: z.array(z.string()).optional().describe('Filter by tags'),
-    filter_status: z.enum(VALID_STATUSES).optional().describe('Filter by status'),
-    response_format: ResponseFormatSchema,
+    filterType: z.enum(VALID_TYPES).optional().describe('Filter by type'),
+    filterTier: z.enum(VALID_TIERS).optional().describe('Filter by tier'),
+    filterProcess: z.enum(VALID_PROCESSES).optional().describe('Filter by process'),
+    filterTags: z.array(z.string()).optional().describe('Filter by tags'),
+    filterStatus: z.enum(VALID_STATUSES).optional().describe('Filter by status'),
+    responseFormat: ResponseFormatSchema,
   })
   .strict();
 

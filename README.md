@@ -89,6 +89,24 @@ npm run dev
 npm start
 ```
 
+### Docker Deployment
+
+**Using Docker Compose (Recommended)**:
+```powershell
+docker-compose up -d
+```
+
+**Using Docker CLI**:
+```powershell
+# Build the image
+npm run docker:build
+
+# Run the container
+npm run docker:run
+```
+
+For detailed Docker deployment instructions, see [DOCKER.md](DOCKER.md).
+
 ### Connecting AI Clients
 
 **Claude Desktop**:
@@ -148,7 +166,7 @@ engineering-standards-mcp-server/
 │       ├── metadata.ts       # Metadata tool
 │       ├── create.ts         # Create tool
 │       └── update.ts         # Update tool
-├── standards/                # Knowledge base directory
+├── data/                     # Knowledge base directory
 ├── scripts/
 │   └── migrate-standards.ts  # Migration utility
 ├── package.json
@@ -165,41 +183,41 @@ engineering-standards-mcp-server/
 
 ## Tools
 
-The server exposes 6 MCP tools:
+The server exposes 6 MCP tools following VS Code best practices:
 
-### 1. `standards_list_index`
+### 1. `list_standards`
 Browse all standards organized hierarchically by type, tier, and process.
 
-**Filters**: type, tier, process, status
+**Parameters**: filterType, filterTier, filterProcess, filterStatus
 **Output**: JSON or Markdown
 
-### 2. `standards_get`
-Retrieve a specific standard by its file path.
+### 2. `get_standard`
+Retrieve a specific standard by its file path or metadata.
 
-**Input**: File path (e.g., `standard-backend-development-spring-boot-security-active.md`)
+**Input**: File path or metadata combination (type, tier, process)
 **Output**: Full standard content with metadata
 
-### 3. `standards_search`
+### 3. `search_standards`
 Full-text search across all standards with relevance scoring.
 
-**Input**: Query string, optional filters, limit
+**Input**: Query string, optional filters (filterType, filterTier, etc.), limit
 **Output**: Ranked search results
 
-### 4. `standards_get_metadata`
+### 4. `get_standards_metadata`
 Query metadata only without fetching full content.
 
-**Filters**: type, tier, process, status, tags
+**Parameters**: filterType, filterTier, filterProcess, filterStatus, filterTags
 
-### 5. `standards_create`
+### 5. `create_standard`
 Create a new standard with automatic validation and file naming.
 
 **Input**: Metadata and content
 **Output**: Created standard path
 
-### 6. `standards_update`
+### 6. `update_standard`
 Update existing standards with version bumping.
 
-**Input**: Path, updated content, version bump type
+**Input**: Path, updated content, versionBump type
 **Output**: Updated standard details
 
 ## File Naming Conventions

@@ -13,16 +13,16 @@ import { formatMetadataList } from '../services/parser.js';
  */
 export async function getMetadata(params: GetMetadataInput): Promise<ToolResponse> {
   try {
-    const { filter_type, filter_tier, filter_process, filter_tags, filter_status, response_format } =
+    const { filterType, filterTier, filterProcess, filterTags, filterStatus, responseFormat } =
       params;
 
     // Get filtered metadata list
     const metadataList = getMetadataList({
-      type: filter_type,
-      tier: filter_tier,
-      process: filter_process,
-      tags: filter_tags,
-      status: filter_status,
+      type: filterType,
+      tier: filterTier,
+      process: filterProcess,
+      tags: filterTags,
+      status: filterStatus,
     });
 
     if (metadataList.length === 0) {
@@ -41,7 +41,7 @@ export async function getMetadata(params: GetMetadataInput): Promise<ToolRespons
     }
 
     // Format output
-    const outputText = formatMetadataList(metadataList, response_format);
+    const outputText = formatMetadataList(metadataList, responseFormat);
     const structuredOutput = {
       count: metadataList.length,
       standards: metadataList,

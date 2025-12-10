@@ -15,7 +15,7 @@ import { readStandard } from '../services/storage.js';
  */
 export async function updateStandardTool(params: UpdateStandardInput): Promise<ToolResponse> {
   try {
-    const { path, content, metadata, version_bump } = params;
+    const { path, content, metadata, versionBump } = params;
 
     // Read existing standard to get current metadata
     const existing = await readStandard(path);
@@ -34,7 +34,7 @@ export async function updateStandardTool(params: UpdateStandardInput): Promise<T
       updatedMetadata.version = metadata.version;
     } else {
       // Auto-bump the version
-      updatedMetadata.version = bumpVersion(existing.metadata.version, version_bump);
+      updatedMetadata.version = bumpVersion(existing.metadata.version, versionBump);
     }
 
     // Update the standard

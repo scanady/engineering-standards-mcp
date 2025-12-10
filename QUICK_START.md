@@ -112,15 +112,15 @@ Once connected, you'll have access to 6 tools:
 
 ### Read-Only Tools
 
-1. **standards_list_index** - Browse all standards in hierarchical format
-2. **standards_get** - Retrieve specific standards by path or metadata
-3. **standards_search** - Full-text search across all standards
-4. **standards_get_metadata** - Get metadata without loading full content
+1. **list_standards** - Browse all standards in hierarchical format
+2. **get_standard** - Retrieve specific standards by path or metadata
+3. **search_standards** - Full-text search across all standards
+4. **get_standards_metadata** - Get metadata without loading full content
 
 ### Write Tools
 
-5. **standards_create** - Create new standards
-6. **standards_update** - Update existing standards
+5. **create_standard** - Create new standards
+6. **update_standard** - Update existing standards
 
 ---
 
@@ -130,16 +130,16 @@ Once connected, you'll have access to 6 tools:
 
 ```
 You: "List all backend development standards"
-→ Claude uses: standards_list_index with filter_tier="backend"
+→ Claude uses: list_standards with filterTier="backend"
 
 You: "Show me the Spring Boot security standard"
-→ Claude uses: standards_get to retrieve the standard
+→ Claude uses: get_standard to retrieve the standard
 
 You: "Search for OAuth authentication examples"
-→ Claude uses: standards_search with query="OAuth authentication"
+→ Claude uses: search_standards with query="OAuth authentication"
 
 You: "Create a new API design standard for REST APIs"
-→ Claude uses: standards_create with appropriate metadata
+→ Claude uses: create_standard with appropriate metadata
 ```
 
 ---
@@ -190,7 +190,7 @@ engineering-standards-mcp-server/
 
 ### Option 1: Use the Create Tool
 
-Use `standards_create` tool through Claude or MCP Inspector:
+Use `create_standard` tool through Claude or MCP Inspector:
 
 ```typescript
 {
@@ -247,9 +247,9 @@ After starting the server, verify:
 - [ ] Health check responds: `curl http://localhost:3000/health`
 - [ ] 2 sample standards are loaded
 - [ ] Can connect with MCP Inspector
-- [ ] Can list standards with `standards_list_index`
-- [ ] Can retrieve standards with `standards_get`
-- [ ] Can search with `standards_search`
+- [ ] Can list standards with `list_standards`
+- [ ] Can retrieve standards with `get_standard`
+- [ ] Can search with `search_standards`
 
 ---
 
